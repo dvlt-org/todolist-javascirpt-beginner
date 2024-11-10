@@ -1,10 +1,6 @@
 const addButton = document.querySelector(".container-form__button")
 const addTaskInput = document.querySelector(".container-form__input")
-const taskList = document.querySelector(".conatiner-info")
-
-
-
-
+const taskList = document.querySelector(".container-info")
 
 function addTask() {
     const taskValue = addTaskInput.value
@@ -12,7 +8,7 @@ function addTask() {
         createTaskElement(taskValue)
         addTaskInput.value = "";
     } else {
-        alert("Please enter your tesk !")
+        alert("Please enter your task!")
     }
 }
 
@@ -20,9 +16,8 @@ function createTaskElement(task) {
     const listItem = document.createElement("div")
     listItem.className = "container-info__card"
     listItem.innerHTML = `
-                <i class="fa-regular fa-circle"></i>
-                <p>${task}</p>
-    
+        <i class="fa-regular fa-circle"></i>
+        <p>${task}</p>
     `
     taskList.appendChild(listItem);
     saveTasks();
@@ -30,24 +25,23 @@ function createTaskElement(task) {
 
 function saveTasks() {
     let tasks = []
-    document.querySelectorAll(".conatiner-info").forEach((item) => {
+    document.querySelectorAll(".container-info__card").forEach((item) => {
         console.log(item.textContent.trim())
-        tasks.push(item.textContent)
+        tasks.push(item.textContent.trim())  // `trim` qo'shildi, bo'sh joylarni olib tashlash uchun
     })
 
     localStorage.setItem("tasks", JSON.stringify(tasks))
 }
 
-
 function loadTasks() {
     const tasks = JSON.parse(localStorage.getItem('tasks'));
-    // for...of sikli yordamida massiv elementlarini ko'ramiz
-    for (let task of tasks) {
-        createTaskElement(task); // 'task' bu yerda har bir elementni ifodalaydi
+    if (tasks) {  // Agar 'tasks' bo'lsa, unda yuklash
+        for (let task of tasks) {
+            createTaskElement(task); // 'task' bu yerda har bir elementni ifodalaydi
+        }
     }
 }
 
 loadTasks();
-
 
 addButton.addEventListener("click", addTask)
